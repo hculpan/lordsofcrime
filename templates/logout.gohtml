@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{ template "title" .}}
+
+    <meta name="theme-color" content="#7952b3">
+  </head>
+  <body class="text-center">
+    {{ template "navbar" . }}    
+    <div class="container">
+      {{ template "header" .}}
+
+      <div class="alert alert-success"><p>You have been logged out.</p></div>
+      <div><a href="/index.html">Return to home</a></div>
+    </div>
+
+        {{ template "footer" . }}
+  </body>
+</html>
+
