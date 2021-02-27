@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/hculpan/lordsofcrime/templates"
 	"github.com/hculpan/lordsofcrime/utils"
 )
 
@@ -25,17 +24,25 @@ func SetupRoutes() {
 	http.Handle("/resources/", http.StripPrefix("/resources", fileserver))
 }
 
-func executeTemplate(name string, templateData *templates.TemplateData, w http.ResponseWriter, req *http.Request) error {
+func initializeTemplateData(templateData *TemplateData, req *http.Request) *TemplateData {
+	result := templateData
+
 	cookies := map[string]string{}
 	for _, v := range req.Cookies() {
 		cookies[v.Name] = v.Value
 	}
 
-	if templateData == nil {
-		templateData = &templates.TemplateData{Cookies: cookies}
+	if result == nil {
+		result = &TemplateData{Cookies: cookies}
 	} else {
-		templateData.Cookies = cookies
+		result.Cookies = cookies
 	}
+
+	return result
+}
+
+func executeTemplate(name string, templateData *TemplateData, w http.ResponseWriter, req *http.Request) error {
+	templateData = initializeTemplateData(templateData, req)
 
 	if token, err := req.Cookie("token"); err == nil {
 		if claims, err := utils.DecodeToken(token.Value); err == nil {
@@ -48,13 +55,23 @@ func executeTemplate(name string, templateData *templates.TemplateData, w http.R
 	return templateList.ExecuteTemplate(w, name, templateData)
 }
 
+func errorTemplate(errorText, originalURL, originalURLName string, w http.ResponseWriter, req *http.Request) error {
+	templateData := initializeTemplateData(nil, req)
+
+	templateData.ErrorText = errorText
+	templateData.OriginalURL = originalURL
+	templateData.OriginalURLName = originalURLName
+
+	return templateList.ExecuteTemplate(w, "message_error.gohtml", templateData)
+}
+
 func executeTemplateNoUserInfo(name string, data interface{}, errorText string, w http.ResponseWriter, req *http.Request) error {
 	cookies := map[string]string{}
 	for _, v := range req.Cookies() {
 		cookies[v.Name] = v.Value
 	}
 
-	templateData := templates.TemplateData{
+	templateData := TemplateData{
 		ErrorText: errorText,
 		Cookies:   cookies,
 		Data:      data,

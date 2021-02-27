@@ -46,7 +46,7 @@ func main() {
 
 	initialize()
 
-	fmt.Println("Server if started and listening on port 8080")
+	fmt.Println("Server is started and listening on port 8080")
 	web.SetupRoutes()
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

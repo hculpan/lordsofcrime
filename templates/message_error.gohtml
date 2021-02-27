@@ -17,7 +17,9 @@
       <div class="alert alert-danger"><p>{{ .ErrorText }}</p></div>
       {{ end }}
 
-      <div><a href="/login.html">Return to login</a></div>
+      {{ if .OriginalURL }}
+        <div><a href="{{ .OriginalURL }}">Return to {{ .OriginalURLName }} </a></div>
+      {{ end }}
       <div><a href="/index.html">Return to home</a></div>
     </div>
 
