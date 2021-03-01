@@ -8,20 +8,23 @@
 
     <meta name="theme-color" content="#7952b3">
   </head>
-  <body class="text-center">
+  <body>
     {{ template "navbar" . }}
-    <div class="container">
+
+    <div class="text-center">
       {{ template "header" .}}
 
-      {{ if .MessageText }}
-      <div class="alert alert-success"><p>{{ .MessageText }}</p></div>
-      {{ end }}
+      <div class="container">
+        {{ if .MessageText }}
+        <div class="alert alert-success"><p>{{ .MessageText }}</p></div>
+        {{ end }}
 
-      <div><a href="/login.html">Return to login</a></div>
-      <div><a href="/index.html">Return to home</a></div>
+        <div><a href="/login.html">Return to login</a></div>
+        <div><a href="/index.html">Return to home</a></div>
+      </div>
     </div>
 
-        {{ template "footer" . }}
+    {{ template "footer" . }}
   </body>
 </html>
 
